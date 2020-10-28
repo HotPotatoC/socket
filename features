@@ -1,0 +1,4 @@
+1. Open port to accept connection
+2. Return client id in connected event
+3. Send message to all client
+4. Send message to specified client
