@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net"
 	"strconv"
+
+	"github.com/gobwas/ws"
 )
 
 // Socket struct for storing connection information
@@ -33,6 +35,20 @@ func (s *Socket) Listen(port int) error {
 	ln, err := createNetListener(port)
 	if err != nil {
 		return err
+	}
+}
+
+func createUpgrader(config *Config) *ws.Upgrader {
+	return &ws.Upgrader{
+		OnHost: func(host []byte) error {
+			hostString := string(host)
+			for _, y := range config.HostWhitelist {
+				if y == hostString {
+					return nil
+				}
+			}
+			return errors.New("Host not allowed")
+		},
 	}
 }
 
