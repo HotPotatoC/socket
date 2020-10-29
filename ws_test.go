@@ -47,7 +47,7 @@ func TestSendCloseAndCloseConnection(t *testing.T) {
 		}
 		sender := c.Sender()
 		sender.Send("Your connection is closed")
-		ok, err := sender.CloseWithMessage(ws.StatusNormalClosure, "You are doing it well")
+		err := sender.CloseWithMessage(ws.StatusNormalClosure, "You are doing it well")
 	})
 
 	socket.Listen(8080)
