@@ -1,6 +1,10 @@
 package socket
 
-import "net"
+import (
+	"net"
+
+	"github.com/gobwas/ws"
+)
 
 // Actor struct containing information of actor
 // Actor can be said as an connected client
@@ -19,9 +23,8 @@ func (actor *Actor) Send(message []byte) error {
 	return nil
 }
 
-// Close this function probably will working well
-// but sometime it's not safe e.g: the connection already
-// closed. Will return bool if connection closing correctly
-func (actor *Actor) Close(message []byte) (bool, error) {
-	return false, nil
+// CloseWithMessage this function supposed to close connection
+// with status code and message
+func (actor *Actor) CloseWithMessage(code ws.StatusCode, message string) error {
+	return nil
 }
