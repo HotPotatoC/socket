@@ -34,6 +34,10 @@ func (s *Socket) Listen(port int) error {
 	}
 }
 
+func createUpgrader() {
+	
+}
+
 func createNetListener(port int) (*net.Listener, error) {
 	ps := strconv.Itoa(port)
 	return net.Listen("tcp", fmt.Sprintf("localhost:%v", ps))
