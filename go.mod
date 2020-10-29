@@ -1,4 +1,4 @@
-module github.com/Stalync/ws
+module github.com/Stalync/socket
 
 go 1.14
 
