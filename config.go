@@ -8,6 +8,7 @@ type Config struct {
 	HostWhitelist []string
 }
 
+// DefaultConfig setting up for default connection config
 var DefaultConfig = Config{
 	Timeout:       time.Second * 4,
 	HostWhitelist: make([]string, 0),
