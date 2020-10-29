@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"net"
-	"strconv"
 
 	"github.com/gobwas/ws"
 )
@@ -24,6 +23,7 @@ func CreateWebSocket() *Socket {
 	return &Socket{
 		port:   8000,
 		actors: make(map[string]*Actor),
+		config: &DefaultConfig,
 	}
 }
 
@@ -32,10 +32,15 @@ func (s *Socket) Listen(port int) error {
 	if port <= 1024 {
 		return errors.New("Port number should be larger than 1024 and not being used")
 	}
-	ln, err := createNetListener(port)
+
+	addr := fmt.Sprintf("localhost:%v", port)
+	ln, err := net.Listen("tcp", addr)
+
 	if err != nil {
 		return err
 	}
+	u := createUpgrader(s.config)
+	s.config.HostWhitelist = append(s.config.HostWhitelist, addr)
 }
 
 func createUpgrader(config *Config) *ws.Upgrader {
@@ -50,10 +55,4 @@ func createUpgrader(config *Config) *ws.Upgrader {
 			return errors.New("Host not allowed")
 		},
 	}
-}
-
-func createNetListener(port int) (*net.Listener, error) {
-	ps := strconv.Itoa(port)
-	ln, err := net.Listen("tcp", fmt.Sprintf("localhost:%v", ps))
-	return &ln, err
 }
