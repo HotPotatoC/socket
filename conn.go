@@ -13,6 +13,8 @@ type Socket struct {
 
 	// list of connected client
 	actors map[string]*Actor
+
+	config *Config
 }
 
 // CreateWebSocket constructor to create socket connection
@@ -34,11 +36,8 @@ func (s *Socket) Listen(port int) error {
 	}
 }
 
-func createUpgrader() {
-	
-}
-
 func createNetListener(port int) (*net.Listener, error) {
 	ps := strconv.Itoa(port)
-	return net.Listen("tcp", fmt.Sprintf("localhost:%v", ps))
+	ln, err := net.Listen("tcp", fmt.Sprintf("localhost:%v", ps))
+	return &ln, err
 }
