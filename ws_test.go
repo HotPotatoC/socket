@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/Stalync/socket"
+	"github.com/gobwas/ws"
 )
 
 func TestCreateWebSocketConnection(t *testing.T) {
@@ -36,7 +37,7 @@ func TestConnectedEventWithGreeting(t *testing.T) {
 	socket.Listen(8080)
 }
 
-func TestSendCloseAndForceCloseConnection(t *testing.T) {
+func TestSendCloseAndCloseConnection(t *testing.T) {
 	socket := socket.CreateWebSocket()
 
 	socket.Callback(func(c *socket.Context) error {
@@ -46,7 +47,7 @@ func TestSendCloseAndForceCloseConnection(t *testing.T) {
 		}
 		sender := c.Sender()
 		sender.Send("Your connection is closed")
-		ok, err := sender.ForceClose()
+		ok, err := sender.CloseWithMessage(ws.StatusNormalClosure, "You are doing it well")
 	})
 
 	socket.Listen(8080)
