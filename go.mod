@@ -1,4 +1,4 @@
-module github.com/Satssuki/ws
+module github.com/Stalync/ws
 
 go 1.14
 
