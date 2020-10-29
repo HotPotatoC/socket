@@ -1,4 +1,10 @@
-1. Open port to accept connection
-2. Return client id in connected event
-3. Send message to all client
-4. Send message to specified client
+1.  Open port to accept connection
+2.  Return connection with function
+3.  Send message to all client (Async pool/Sync)
+4.  Send message to specified client
+5.  User with id, is exists or not
+6.  Clustering with redis thought
+7.  Close connection
+8.  Header handler
+9.  Context
+10. Authentication JWT
