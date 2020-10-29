@@ -1,26 +1,26 @@
-package ws_test
+package socket_test
 
 import (
 	"testing"
 
-	"github.com/Stalync/ws"
+	"github.com/Stalync/socket"
 )
 
 func TestCreateWebSocketConnection(t *testing.T) {
-	socket := ws.CreateWebSocket()
+	socket := socket.CreateWebSocket()
 	socket.Listen(8080)
 }
 
 func TestCreateWebSocketConnectionWithLogger(t *testing.T) {
-	socket := ws.CreateWebSocket()
+	socket := socket.CreateWebSocket()
 	socket.SetLogger()
 	socket.Listen(8080)
 }
 
 func TestConnectedEventWithGreeting(t *testing.T) {
-	socket := ws.CreateWebSocket()
+	socket := socket.CreateWebSocket()
 
-	socket.Callback(func(c *ws.Context) error {
+	socket.Callback(func(c *socket.Context) error {
 		var err error
 		if c.Event().Type() != "connected" {
 			return err
@@ -37,9 +37,9 @@ func TestConnectedEventWithGreeting(t *testing.T) {
 }
 
 func TestSendCloseAndForceCloseConnection(t *testing.T) {
-	socket := ws.CreateWebSocket()
+	socket := socket.CreateWebSocket()
 
-	socket.Callback(func(c *ws.Context) error {
+	socket.Callback(func(c *socket.Context) error {
 		var err error
 		if c.Event().Type() != "connected" {
 			return err
@@ -53,19 +53,19 @@ func TestSendCloseAndForceCloseConnection(t *testing.T) {
 }
 
 func TestAnyEventWithParseMessage(t *testing.T) {
-	socket := ws.CreateWebSocket()
+	socket := socket.CreateWebSocket()
 	defer socket.Listen(8080)
 
-	socket.Callback(func(c *ws.Context) error {
+	socket.Callback(func(c *socket.Context) error {
 		var err error = nil
 		var eType = c.Event().Type()
 
-		if eType != ws.TypeConnected || eType != ws.TypeClose {
+		if eType != socket.TypeConnected || eType != socket.TypeClose {
 			return err
 		}
 		sender := c.Sender()
 		messages := c.Message()
-		if messages.Type == ws.TypeText {
+		if messages.Type == socket.TypeText {
 
 			text := messages.Bytes()
 
@@ -73,7 +73,7 @@ func TestAnyEventWithParseMessage(t *testing.T) {
 			err := socket.Send(text)
 
 			// Send To All Without me
-			socket.SendWithFilter(func(s *ws.Actor, callback func(string) error) {
+			socket.SendWithFilter(func(s *socket.Actor, callback func(string) error) {
 				s.Attr.(Attr)
 				if s.ID != sender.ID() {
 					err = callback(s.ID())
@@ -81,7 +81,7 @@ func TestAnyEventWithParseMessage(t *testing.T) {
 			}, messages.Bytes(), []byte(`bla blac`), []byte(`bla blac 2`))
 
 			// Or with async send
-			socket.SendAsyncWithFilter(func(s *ws.Actor, callback func(string) error) {
+			socket.SendAsyncWithFilter(func(s *socket.Actor, callback func(string) error) {
 				s.Attr.(Attr)
 				if s.ID != sender.ID() {
 					err = callback(s.ID())

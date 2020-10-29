@@ -1,4 +1,4 @@
-package ws
+package socket
 
 // TypeCode type alias for byte enum
 type TypeCode byte
