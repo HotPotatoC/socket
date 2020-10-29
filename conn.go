@@ -41,6 +41,25 @@ func (s *Socket) Listen(port int) error {
 	}
 	u := createUpgrader(s.config)
 	s.config.HostWhitelist = append(s.config.HostWhitelist, addr)
+	for {
+		conn, err := ln.Accept()
+		if err != nil {
+			continue
+		}
+	}
+}
+
+func (s *Socket) registerActor(conn net.Conn) {
+	id := generateKey(s.config.UIDLength)
+	_, found := s.actors[id]
+	for found {
+		id = generateKey(s.config.UIDLength)
+		_, found = s.actors[id]
+	}
+	s.actors[id] = &Actor{
+		id:   &id,
+		conn: &conn,
+	}
 }
 
 func createUpgrader(config *Config) *ws.Upgrader {
