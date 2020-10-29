@@ -36,6 +36,22 @@ func TestConnectedEventWithGreeting(t *testing.T) {
 	socket.Listen(8080)
 }
 
+func TestSendCloseAndForceCloseConnection(t *testing.T) {
+	socket := ws.CreateWebSocket()
+
+	socket.Callback(func(c *ws.Context) error {
+		var err error
+		if c.Event().Type() != "connected" {
+			return err
+		}
+		sender := c.Sender()
+		sender.Send("Your connection is closed")
+		sender.ForceClose()
+	})
+
+	socket.Listen(8080)
+}
+
 func TestAnyEventWithParseMessage(t *testing.T) {
 	socket := ws.CreateWebSocket()
 	defer socket.Listen(8080)
