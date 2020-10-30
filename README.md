@@ -34,21 +34,21 @@ func main() {
 
 	server.Callback(func(c *socket.Context) error {
     
-    	eType := c.Event().Type()
-	if ok, _ := eType.Eq(socket.TypeConnected); ok {
+		eType := c.Event().Type()
+		if ok, _ := eType.Eq(socket.TypeConnected); ok {
 
-		fmt.Println("Someone connected with id: " + c.Sender().ID())
-		return c.Sender().SendText("Welcome user")
+			fmt.Println("Someone connected with id: " + c.Sender().ID())
+			return c.Sender().SendText("Welcome user")
 
-	}
+		}
 
-	if ok, _ := eType.Eq(socket.TypeDisconnected); c.Message().String() == "exit" || ok {
+		if ok, _ := eType.Eq(socket.TypeDisconnected); c.Message().String() == "exit" || ok {
 
-		// Close function should be called, it will handle delete session in internal server
-		err = server.CloseByActorWithMessage(c.Sender(), ws.StatusNormalClosure, "Byee Human")
-		return err
-	}
-	return c.Sender().SendText(c.Message().String())
+			// Close function should be called, it will handle delete session in internal server
+			err = server.CloseByActorWithMessage(c.Sender(), ws.StatusNormalClosure, "Byee Human")
+			return err
+		}
+		return c.Sender().SendText(c.Message().String())
 	})
 
 	fmt.Println(server.Listen(8000))
