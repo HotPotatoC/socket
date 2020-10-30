@@ -31,7 +31,7 @@ func (s *Socket) contextBuilder(a *Actor) (*Context, error) {
 	}
 
 	ctx := createContext(s.config)
-
+	ctx.message.data = &payload
 	ctx.event.h = &h
 	ctx.event.code = &code
 	ctx.sender = a
