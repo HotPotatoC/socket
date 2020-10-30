@@ -41,10 +41,18 @@ func (s *Socket) Listen(port int) error {
 	}
 	u := createUpgrader(s.config)
 	s.config.HostWhitelist = append(s.config.HostWhitelist, addr)
+
 	for {
 		conn, err := ln.Accept()
+		if err == nil {
+			_, err = u.Upgrade(conn)
+			if err == nil {
+				s.registerActor(conn)
+			}
+		}
+
 		if err != nil {
-			continue
+			conn.Close()
 		}
 	}
 }
