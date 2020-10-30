@@ -86,3 +86,10 @@ var connectedContext = func() *Context {
 	c.event.code = &connected
 	return c
 }()
+
+var closedContext = func() *Context {
+	c := createContext(&DefaultConfig)
+	disconnected := TypeDisconnected
+	c.event.code = &disconnected
+	return c
+}()
