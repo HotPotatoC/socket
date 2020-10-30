@@ -5,18 +5,29 @@ import (
 	"testing"
 
 	"github.com/Stalync/socket"
+	"github.com/gobwas/ws"
 )
 
 func TestSocket_Listen(t *testing.T) {
-	ws := socket.CreateWebSocket()
-	ws.Callback(func(c *socket.Context) error {
-		if ok, err := c.Event().Type().Eq(socket.TypeConnected); err == nil && ok {
+	server := socket.CreateWebSocket()
+
+	server.Callback(func(c *socket.Context) (err error) {
+
+		if ok, _ := c.Event().Type().Eq(socket.TypeConnected); ok {
+
 			fmt.Println("Someone connected with id: " + c.Sender().ID())
-			c.Sender().SendText("Welcome user")
-			c.Message().Bytes()
+			return c.Sender().SendText("Welcome user")
+
 		}
-		c.Sender().SendText(c.Message().String())
+		if ok, _ := c.Event().Type().Eq(socket.TypeDisconnected); c.Message().String() == "exit" || ok {
+
+			// Close function should be called, it will handle delete session in internal server
+			err = server.CloseByActorWithMessage(c.Sender(), ws.StatusNormalClosure, "Byee Human")
+			return nil
+		}
+
 		return nil
 	})
-	ws.Listen(8080)
+
+	fmt.Println(server.Listen(8000))
 }
