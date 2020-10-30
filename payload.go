@@ -23,8 +23,8 @@ func (msg *Message) Bytes() []byte {
 
 // Event describe of incoming event type
 type Event struct {
-	header *ws.Header
-	code   *TypeCode
+	h    *ws.Header
+	code *TypeCode
 }
 
 // Type return event type
@@ -32,9 +32,8 @@ func (e *Event) Type() *TypeCode {
 	return e.code
 }
 
-// Header return event header
-func (e *Event) Header() *ws.Header {
-	return e.header
+func (e *Event) header() *ws.Header {
+	return e.h
 }
 
 // Context stored info from client
@@ -53,7 +52,7 @@ func createContext(config *Config) *Context {
 	return &Context{
 		timeout: ctx,
 		event: &Event{
-			header: &ws.Header{},
+			h: &ws.Header{},
 		},
 		message: &Message{
 			data: &[]byte{},
