@@ -20,6 +20,7 @@ This project not done yet, and we still working to improving this. If you have a
   - Host Whitelist
   - Cookie parser
 - [ ] Alerting
+  - Logger
 
 # Usage
 The example below still terrible but you can customize by yourself
