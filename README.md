@@ -55,7 +55,7 @@ func main() {
 }
 ```
 # Need to know
---- 
+
 ### List of known access event type
 - TypeContinuation
 - TypeConnected
