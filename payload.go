@@ -2,23 +2,21 @@ package socket
 
 import (
 	"context"
-
-	"github.com/gobwas/ws"
 )
 
 // Message stored data of incoming signal from client
 type Message struct {
-	data *[]byte
+	data []byte
 }
 
 // Length return length of incoming data
 func (msg *Message) Length() int {
-	return len(*msg.data)
+	return len(msg.data)
 }
 
 // Bytes return array of bytes incoming data
 func (msg *Message) Bytes() []byte {
-	return *msg.data
+	return msg.data
 }
 
 // String return string of array bytes message
@@ -28,17 +26,12 @@ func (msg *Message) String() string {
 
 // Event describe of incoming event type
 type Event struct {
-	h    *ws.Header
 	code *TypeCode
 }
 
 // Type return event type
 func (e *Event) Type() *TypeCode {
 	return e.code
-}
-
-func (e *Event) header() *ws.Header {
-	return e.h
 }
 
 // Context stored info from client
@@ -56,11 +49,9 @@ func createContext(config *Config) *Context {
 	)
 	return &Context{
 		timeout: ctx,
-		event: &Event{
-			h: &ws.Header{},
-		},
+		event:   &Event{},
 		message: &Message{
-			data: &[]byte{},
+			data: make([]byte, 0),
 		},
 	}
 }
