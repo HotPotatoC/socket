@@ -31,6 +31,9 @@ func CreateWebSocket() *Socket {
 
 // Listen function that loop every time to catch new connection
 func (s *Socket) Listen(port int) error {
+	if s.cb == nil {
+		return errors.New("Callback should not be nill")
+	}
 	if port <= 1024 {
 		return errors.New("Port number should be larger than 1024 and not being used")
 	}
@@ -78,7 +81,10 @@ func (s *Socket) registerActor(conn net.Conn) *Actor {
 // of connected actors. and call callback when message accepted
 func (s *Socket) serveActorMessage(a *Actor) {
 	go func() {
-
+		ctx, err := s.contextBuilder(a)
+		if err == nil {
+			s.cb(ctx)
+		}
 	}()
 }
 
