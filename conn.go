@@ -105,14 +105,10 @@ func (s *Socket) CloseByActorWithMessage(a *Actor, code ws.StatusCode, message s
 // CloseByIDWithMessage this function supposed
 // to close connection with status code and message
 func (s *Socket) CloseByIDWithMessage(id string, code ws.StatusCode, message string) (err error) {
-	actor, found := s.actors[id]
-	delete(s.actors, id)
-
-	if found {
-		err = frameBuilderAndSender(actor, TypeDisconnected, []byte(message), code)
-		if err == nil {
-			err = (*actor.conn).Close()
-		}
+	if a, found := s.actors[id]; found {
+		err = s.CloseByActorWithMessage(a, code, message)
+	} else {
+		err = errors.New("ID Not found")
 	}
 	return
 }
