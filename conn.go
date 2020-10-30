@@ -53,7 +53,7 @@ func (s *Socket) Listen(port int) error {
 			_, err = u.Upgrade(conn)
 			if err == nil {
 				currentActor = s.registerActor(conn)
-				s.cb(connectedContext)
+				s.cb(connectedContext(currentActor))
 			}
 		}
 		if err != nil {
