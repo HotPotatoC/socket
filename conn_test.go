@@ -8,10 +8,9 @@ import (
 )
 
 func TestSocket_Listen(t *testing.T) {
-
 	ws := socket.CreateWebSocket()
 	ws.Callback(func(c *socket.Context) error {
-		fmt.Println(c.Event().Type(), string(*c.Message().data))
+		fmt.Println(c.Event().Type(), string(c.Message().Bytes()))
 		return nil
 	})
 	ws.Listen(8080)
