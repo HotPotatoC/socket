@@ -21,6 +21,11 @@ func (msg *Message) Bytes() []byte {
 	return *msg.data
 }
 
+// String return string of array bytes message
+func (msg *Message) String() string {
+	return string(msg.Bytes())
+}
+
 // Event describe of incoming event type
 type Event struct {
 	h    *ws.Header
