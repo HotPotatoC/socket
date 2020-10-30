@@ -18,8 +18,8 @@ func (actor *Actor) ID() string {
 	return *actor.id
 }
 
-// Send write message to this actor
-func (actor *Actor) Send(message []byte) error {
+// SendText write message to this actor
+func (actor *Actor) SendText(message []byte) error {
 	return nil
 }
 
