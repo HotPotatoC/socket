@@ -7,6 +7,7 @@ This project not done yet, and we still working to improving this. If you have a
 
 - [X] Simple API (but still low level)
 - [X] Send message to other client (Sync)
+- [ ] Send with worker pool (Async)
 - [X] Close connection
 - [ ] Resource pooling
 - [ ] Clustering/Scaling
@@ -14,7 +15,7 @@ This project not done yet, and we still working to improving this. If you have a
   - JWT Token
   - Host Whitelist
   - Cookie parser
-- [ ] Send with worker pool (Async)
+- [ ] Alerting
 
 # Usage
 The example below still terrible but you can customize by yourself
@@ -69,6 +70,6 @@ wscat -c ws://localhost:8000
 - TypePing
 - TypePong  
 
-### List of known access event type
+### List of known data type
 - TypeText
 - TypeBinary
