@@ -51,6 +51,12 @@ func createContext(config *Config) *Context {
 	)
 	return &Context{
 		timeout: ctx,
+		event: Event{
+			&ws.Header{},
+		},
+		message: Message{
+			data: &[]byte{},
+		},
 	}
 }
 
@@ -67,4 +73,9 @@ func (c *Context) Message() *Message {
 // Sender return Actor from this context
 func (c *Context) Sender() *Actor {
 	return &c.sender
+}
+
+// Ctx return parrent Context
+func (c *Context) Ctx() context.Context {
+	return c.timeout
 }
