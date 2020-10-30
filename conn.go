@@ -100,15 +100,15 @@ func (s *Socket) Callback(cb func(c *Context) error) {
 }
 
 func createUpgrader(config *Config) *ws.Upgrader {
-	return &ws.Upgrader{
-		OnHost: func(host []byte) error {
-			hostString := string(host)
-			for _, y := range config.HostWhitelist {
-				if y == hostString {
-					return nil
-				}
-			}
-			return errors.New("Host not allowed")
-		},
+	return &ws.Upgrader{}
+}
+
+func handleWhitelistHost(config *Config, host []byte) error {
+	hostString := string(host)
+	for _, y := range config.HostWhitelist {
+		if y == hostString {
+			return nil
+		}
 	}
+	return errors.New("Host not allowed")
 }
