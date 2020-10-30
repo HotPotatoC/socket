@@ -91,6 +91,32 @@ func (s *Socket) serveActorMessage(a *Actor) {
 	}()
 }
 
+// CloseByActorWithMessage this function supposed
+// to close connection with status code and message
+func (s *Socket) CloseByActorWithMessage(a *Actor, code ws.StatusCode, message string) (err error) {
+	delete(s.actors, a.ID())
+	err = frameBuilderAndSender(a, TypeDisconnected, []byte(message), code)
+	if err == nil {
+		err = (*a.conn).Close()
+	}
+	return
+}
+
+// CloseByIDWithMessage this function supposed
+// to close connection with status code and message
+func (s *Socket) CloseByIDWithMessage(id string, code ws.StatusCode, message string) (err error) {
+	actor, found := s.actors[id]
+	delete(s.actors, id)
+
+	if found {
+		err = frameBuilderAndSender(actor, TypeDisconnected, []byte(message), code)
+		if err == nil {
+			err = (*actor.conn).Close()
+		}
+	}
+	return
+}
+
 // Callback used to set handler of incoming message
 func (s *Socket) Callback(cb func(c *Context) error) {
 	s.cb = cb
