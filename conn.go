@@ -38,18 +38,17 @@ func (s *Socket) Listen(port int) error {
 		return errors.New("Port number should be larger than 1024 and not being used")
 	}
 
-	addr := fmt.Sprintf("localhost:%v", port)
-	ln, err := net.Listen("tcp", addr)
+	ln, err := net.Listen("tcp", fmt.Sprintf(":%v", port))
 
 	if err != nil {
 		return err
 	}
 	u := createUpgrader(s.config)
-	s.config.HostWhitelist = append(s.config.HostWhitelist, addr)
 
 	for {
 		conn, err := ln.Accept()
 		var currentActor *Actor
+
 		if err == nil {
 			_, err = u.Upgrade(conn)
 			if err == nil {
@@ -103,7 +102,7 @@ func createUpgrader(config *Config) *ws.Upgrader {
 
 func handleWhitelistHost(config *Config, host []byte) error {
 	hostString := string(host)
-	for _, y := range config.HostWhitelist {
+	for _, y := range config.hostWhitelist {
 		if y == hostString {
 			return nil
 		}
