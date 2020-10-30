@@ -38,7 +38,7 @@ func (s *Socket) contextBuilder(a *Actor) (*Context, error) {
 	return ctx, nil
 }
 
-func frameBuilder(a *Actor, code interface{}, data []byte, status ...ws.StatusCode) (err error) {
+func frameBuilderAndSender(a *Actor, code interface{}, data []byte, status ...ws.StatusCode) (err error) {
 	var ok bool
 	var val TypeCode
 	var frame ws.Frame
