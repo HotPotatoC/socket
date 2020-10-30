@@ -16,6 +16,8 @@ type Socket struct {
 	actors map[string]*Actor
 
 	config *Config
+
+	cb func(c *Context) error
 }
 
 // CreateWebSocket constructor to create socket connection
@@ -78,6 +80,11 @@ func (s *Socket) serveActorMessage(a *Actor) {
 	go func() {
 
 	}()
+}
+
+// Callback used to set handler of incoming message
+func (s *Socket) Callback(cb func(c *Context) error) {
+	s.cb = cb
 }
 
 func createUpgrader(config *Config) *ws.Upgrader {
