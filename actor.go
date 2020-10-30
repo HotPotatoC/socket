@@ -19,8 +19,8 @@ func (actor *Actor) ID() string {
 }
 
 // SendText write message to this actor
-func (actor *Actor) SendText(message []byte) error {
-	return nil
+func (actor *Actor) SendText(message string) error {
+	return frameBuilderAndSender(actor, TypeText, []byte(message))
 }
 
 // CloseWithMessage this function supposed to close connection
