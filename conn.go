@@ -47,7 +47,8 @@ func (s *Socket) Listen(port int) error {
 		if err == nil {
 			_, err = u.Upgrade(conn)
 			if err == nil {
-				s.registerActor(conn)
+				currentActor := s.registerActor(conn)
+				s.serveActorMessage(currentActor)
 			}
 		}
 
@@ -57,7 +58,7 @@ func (s *Socket) Listen(port int) error {
 	}
 }
 
-func (s *Socket) registerActor(conn net.Conn) {
+func (s *Socket) registerActor(conn net.Conn) *Actor {
 	id := generateKey(s.config.UIDLength)
 	_, found := s.actors[id]
 	for found {
@@ -68,6 +69,15 @@ func (s *Socket) registerActor(conn net.Conn) {
 		id:   &id,
 		conn: &conn,
 	}
+	return s.actors[id]
+}
+
+// serveActorMessage function that listen incoming message
+// of connected actors. and call callback when message accepted
+func (s *Socket) serveActorMessage(a *Actor) {
+	go func() {
+
+	}()
 }
 
 func createUpgrader(config *Config) *ws.Upgrader {
