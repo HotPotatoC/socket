@@ -49,17 +49,21 @@ func (s *Socket) Listen(port int) error {
 
 	for {
 		conn, err := ln.Accept()
+		var currentActor *Actor
 		if err == nil {
 			_, err = u.Upgrade(conn)
 			if err == nil {
-				currentActor := s.registerActor(conn)
-				s.serveActorMessage(currentActor)
+				currentActor = s.registerActor(conn)
+				connectedContext := createContext(s.config)
+				connectedContext.event.header.OpCode = ws.OpCode(TypeConnected)
+				s.cb(connectedContext)
 			}
 		}
-
 		if err != nil {
 			conn.Close()
+			continue
 		}
+		s.serveActorMessage(currentActor)
 	}
 }
 
@@ -81,9 +85,11 @@ func (s *Socket) registerActor(conn net.Conn) *Actor {
 // of connected actors. and call callback when message accepted
 func (s *Socket) serveActorMessage(a *Actor) {
 	go func() {
-		ctx, err := s.contextBuilder(a)
-		if err == nil {
-			s.cb(ctx)
+		for {
+			ctx, err := s.contextBuilder(a)
+			if err == nil {
+				s.cb(ctx)
+			}
 		}
 	}()
 }
