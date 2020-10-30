@@ -54,8 +54,6 @@ func (s *Socket) Listen(port int) error {
 			_, err = u.Upgrade(conn)
 			if err == nil {
 				currentActor = s.registerActor(conn)
-				connectedContext := createContext(s.config)
-				connectedContext.event.header.OpCode = ws.OpCode(TypeConnected)
 				s.cb(connectedContext)
 			}
 		}

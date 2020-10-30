@@ -79,3 +79,10 @@ func (c *Context) Sender() *Actor {
 func (c *Context) Ctx() context.Context {
 	return c.timeout
 }
+
+var connectedContext = func() *Context {
+	c := createContext(&DefaultConfig)
+	connected := TypeConnected
+	c.event.code = &connected
+	return c
+}()
