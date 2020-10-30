@@ -32,7 +32,7 @@ import (
 func main() {
 	server := socket.CreateWebSocket()
 
-	server.Callback(func(c *socket.Context) (err error) {
+	server.Callback(func(c *socket.Context) error {
     
     eType := c.Event().Type()
 		if ok, _ := eType.Eq(socket.TypeConnected); ok {
@@ -41,19 +41,25 @@ func main() {
 			return c.Sender().SendText("Welcome user")
 
 		}
+		
 		if ok, _ := eType.Eq(socket.TypeDisconnected); c.Message().String() == "exit" || ok {
 
 			// Close function should be called, it will handle delete session in internal server
 			err = server.CloseByActorWithMessage(c.Sender(), ws.StatusNormalClosure, "Byee Human")
-			return nil
+			return err
 		}
-
-		return nil
+		return c.Sender().SendText(c.Message().String())
 	})
 
 	fmt.Println(server.Listen(8000))
 }
 ```
+using [wscat](https://github.com/websockets/wscat) to test connection
+
+```bash
+wscat -c ws://localhost:8000
+```
+
 # Need to know
 
 ### List of known access event type
