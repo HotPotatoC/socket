@@ -14,7 +14,7 @@ const (
 	// Event code
 	TypeContinuation TypeCode = 0x0
 	TypeConnected    TypeCode = 0x7
-	TypeClose        TypeCode = 0x8
+	TypeDisconnected TypeCode = 0x8
 	TypePing         TypeCode = 0x9
 	TypePong         TypeCode = 0xa
 

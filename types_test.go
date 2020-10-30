@@ -21,7 +21,7 @@ func TestTypeCode_Eq(t *testing.T) {
 		t.Error("Why this is wrong?, this shoud be false")
 	}
 
-	if x, y := etype.Eq(socket.TypeClose); y != nil || x {
+	if x, y := etype.Eq(socket.TypeDisconnected); y != nil || x {
 		t.Error("Why this is wrong?, this shoud be false")
 	}
 
