@@ -8,6 +8,9 @@ This project not done yet, and we still working to improving this. If you have a
 - [X] Simple API (but still low level)
 - [X] Send message to other client (Sync)
 - [ ] Send with worker pool (Async)
+- [ ] Data response information (Ack, etc)
+- [ ] Rate limiting
+- [ ] Container instant WebSocket
 - [X] Close connection
 - [ ] Resource pooling
 - [ ] Clustering/Scaling
