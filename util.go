@@ -18,6 +18,7 @@ func stringWithCharset(length int, charset string) string {
 	return string(b)
 }
 
+// This function will generate key/token with specified length
 func generateKey(length int) string {
 	return stringWithCharset(length, charset)
 }
