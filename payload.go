@@ -80,16 +80,18 @@ func (c *Context) Ctx() context.Context {
 	return c.timeout
 }
 
-var connectedContext = func() *Context {
+var connectedContext = func(a *Actor) *Context {
 	c := createContext(&DefaultConfig)
 	connected := TypeConnected
 	c.event.code = &connected
+	c.sender = a
 	return c
-}()
+}
 
-var closedContext = func() *Context {
+var closedContext = func(a *Actor) *Context {
 	c := createContext(&DefaultConfig)
 	disconnected := TypeDisconnected
 	c.event.code = &disconnected
+	c.sender = a
 	return c
-}()
+}
