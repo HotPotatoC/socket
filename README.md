@@ -54,3 +54,15 @@ func main() {
 	fmt.Println(server.Listen(8000))
 }
 ```
+# Need to know
+--- 
+### List of known access event type
+- TypeContinuation
+- TypeConnected
+- TypeDisconnected
+- TypePing
+- TypePong  
+
+### List of known access event type
+- TypeText
+- TypeBinary
