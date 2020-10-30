@@ -24,12 +24,9 @@ func (s *Socket) contextBuilder(a *Actor) (*Context, error) {
 		ws.Cipher(payload, h.Mask, 0)
 	}
 	ctx := createContext(s.config)
-	ctx.event = Event{
-		header: &h,
-	}
-	ctx.message = Message{
-		data: &payload,
-	}
+	ctx.event.header = &h
+
+	ctx.message.data = &payload
 	ctx.sender = *a
 	return ctx, nil
 }
