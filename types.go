@@ -26,6 +26,14 @@ const (
 // Eq supposed to compare code from this pkg
 // to ws.OpCode
 func (t *TypeCode) Eq(code interface{}) (bool, error) {
+	if val, ok := parseTypeCode(code); ok {
+		x := val ^ *t
+		return x == 0, nil
+	}
+	return false, errors.New("Type not supported")
+}
+
+func parseTypeCode(code interface{}) (TypeCode, bool) {
 	var val TypeCode
 	var ok bool
 	var op ws.OpCode
@@ -35,9 +43,6 @@ func (t *TypeCode) Eq(code interface{}) (bool, error) {
 	} else {
 		val, ok = code.(TypeCode)
 	}
-	if ok {
-		x := val ^ *t
-		return x == 0, nil
-	}
-	return false, errors.New("Type not supported")
+
+	return val, ok
 }
