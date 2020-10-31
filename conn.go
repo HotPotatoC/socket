@@ -91,6 +91,20 @@ func (s *Socket) serveActorMessage(a *Actor) {
 	}()
 }
 
+func createUpgrader(config *Config) *ws.Upgrader {
+	return &ws.Upgrader{}
+}
+
+func handleWhitelistHost(config *Config, host []byte) error {
+	hostString := string(host)
+	for _, y := range config.hostWhitelist {
+		if y == hostString {
+			return nil
+		}
+	}
+	return errors.New("Host not allowed")
+}
+
 // CloseByActorWithMessage this function supposed
 // to close connection with status code and message
 func (s *Socket) CloseByActorWithMessage(a *Actor, code ws.StatusCode, message string) (err error) {
@@ -134,18 +148,4 @@ func (s *Socket) SendTextTo(id, message string) error {
 		return errors.New("ID Not found")
 	}
 	return actor.SendText(message)
-}
-
-func createUpgrader(config *Config) *ws.Upgrader {
-	return &ws.Upgrader{}
-}
-
-func handleWhitelistHost(config *Config, host []byte) error {
-	hostString := string(host)
-	for _, y := range config.hostWhitelist {
-		if y == hostString {
-			return nil
-		}
-	}
-	return errors.New("Host not allowed")
 }
