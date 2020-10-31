@@ -39,30 +39,29 @@ import (
 func main() {
 	server := socket.CreateWebSocket()
 
-	server.Callback(func(c *socket.Context) error {
-    
-		eType := c.Event().Type()
-		if ok, _ := eType.Eq(socket.TypeConnected); ok {
+	server.Callback(func(c *socket.Context) (err error) {
 
-			fmt.Println("Someone connected with id: " + c.Sender().ID())
-			return c.Sender().SendText("Welcome user")
-
+		switch c.Event().Type() {
+		case socket.TypeConnected:
+			fmt.Println(fmt.Sprintf("Master %v is connected", c.Sender().ID()))
+			err = c.Sender().SendText("Hellow Master")
+			break
+		case socket.TypeText:
+			message := c.Message().String()
+			if message == "exit" {
+				return server.CloseNormalClosure(c.Sender(), "Byeeee Master")
+			}
+			err = c.Sender().SendText(message)
+			break
+		case socket.TypeDisconnected:
+			fmt.Println(fmt.Sprintf("Master %v is disconnected", c.Sender().ID()))
+			break
 		}
 
-		if ok, _ := eType.Eq(socket.TypeDisconnected); c.Message().String() == "exit" || ok {
-
-			// If close function not called when some client is disconnected
-			// Server will automatically close and delete client connection
-			err = server.CloseByActorWithMessage(c.Sender(), ws.StatusNormalClosure, "Byee Human")
-			return err
-		}
-
-		// SendTextTo client can send message each other through this function
-		// but before you use it, you must store the specified client id
-		return server.SendTextTo(c.Sender().ID(), "Hello from server")
+		return
 	})
 
-	fmt.Println(server.Listen(8000))
+	fmt.Println(server.Listen(8080))
 }
 ```
 using [wscat](https://github.com/websockets/wscat) to test connection
