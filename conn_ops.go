@@ -2,35 +2,163 @@ package socket
 
 import "github.com/gobwas/ws"
 
-// CloseByActorWithMessage this function supposed
-// to close connection with status code and message
-func (s *Socket) CloseByActorWithMessage(a *Actor, code ws.StatusCode, message string) (err error) {
+// CloseNormalClosure is used to close actor connection
+// with defined status
+func (s *Socket) CloseNormalClosure(a *Actor, message string) (err error) {
 	s.actors.Delete(a.ID())
-	messageByte := append([]byte{}, message...)
-	err = frameBuilderAndSender(a, TypeDisconnected, messageByte, code)
+	reason := ws.NewCloseFrameBody(ws.StatusNormalClosure, message)
+	frame := ws.NewCloseFrame(reason)
+	err = ws.WriteFrame((*a.conn), frame)
+
 	if err == nil {
 		err = (*a.conn).Close()
 	}
 	return
 }
 
-// CloseByIDWithMessage this function supposed
-// to close connection with status code and message
-func (s *Socket) CloseByIDWithMessage(id string, code ws.StatusCode, message string) error {
-	if a, found := s.actors.Read(id); found {
-		return s.CloseByActorWithMessage(a, code, message)
+// CloseGoingAway is used to close actor connection
+// with defined status
+func (s *Socket) CloseGoingAway(a *Actor, message string) (err error) {
+	s.actors.Delete(a.ID())
+	reason := ws.NewCloseFrameBody(ws.StatusGoingAway, message)
+	frame := ws.NewCloseFrame(reason)
+	err = ws.WriteFrame((*a.conn), frame)
+
+	if err == nil {
+		err = (*a.conn).Close()
 	}
-	return errIDNotFound
+	return
+}
+
+// CloseProtocolError is used to close actor connection
+// with defined status
+func (s *Socket) CloseProtocolError(a *Actor, message string) (err error) {
+	s.actors.Delete(a.ID())
+	reason := ws.NewCloseFrameBody(ws.StatusProtocolError, message)
+	frame := ws.NewCloseFrame(reason)
+	err = ws.WriteFrame((*a.conn), frame)
+
+	if err == nil {
+		err = (*a.conn).Close()
+	}
+	return
+}
+
+// CloseUnsupportedData is used to close actor connection
+// with defined status
+func (s *Socket) CloseUnsupportedData(a *Actor, message string) (err error) {
+	s.actors.Delete(a.ID())
+	reason := ws.NewCloseFrameBody(ws.StatusUnsupportedData, message)
+	frame := ws.NewCloseFrame(reason)
+	err = ws.WriteFrame((*a.conn), frame)
+
+	if err == nil {
+		err = (*a.conn).Close()
+	}
+	return
+}
+
+// CloseNoMeaningYet is used to close actor connection
+// with defined status
+func (s *Socket) CloseNoMeaningYet(a *Actor, message string) (err error) {
+	s.actors.Delete(a.ID())
+	reason := ws.NewCloseFrameBody(ws.StatusNoMeaningYet, message)
+	frame := ws.NewCloseFrame(reason)
+	err = ws.WriteFrame((*a.conn), frame)
+
+	if err == nil {
+		err = (*a.conn).Close()
+	}
+	return
+}
+
+// CloseInvalidFramePayloadData is used to close actor connection
+// with defined status
+func (s *Socket) CloseInvalidFramePayloadData(a *Actor, message string) (err error) {
+	s.actors.Delete(a.ID())
+	reason := ws.NewCloseFrameBody(ws.StatusInvalidFramePayloadData, message)
+	frame := ws.NewCloseFrame(reason)
+	err = ws.WriteFrame((*a.conn), frame)
+
+	if err == nil {
+		err = (*a.conn).Close()
+	}
+	return
+}
+
+// ClosePolicyViolation is used to close actor connection
+// with defined status
+func (s *Socket) ClosePolicyViolation(a *Actor, message string) (err error) {
+	s.actors.Delete(a.ID())
+	reason := ws.NewCloseFrameBody(ws.StatusPolicyViolation, message)
+	frame := ws.NewCloseFrame(reason)
+	err = ws.WriteFrame((*a.conn), frame)
+
+	if err == nil {
+		err = (*a.conn).Close()
+	}
+	return
+}
+
+// CloseMessageTooBig is used to close actor connection
+// with defined status
+func (s *Socket) CloseMessageTooBig(a *Actor, message string) (err error) {
+	s.actors.Delete(a.ID())
+	reason := ws.NewCloseFrameBody(ws.StatusMessageTooBig, message)
+	frame := ws.NewCloseFrame(reason)
+	err = ws.WriteFrame((*a.conn), frame)
+
+	if err == nil {
+		err = (*a.conn).Close()
+	}
+	return
+}
+
+// CloseMandatoryExt is used to close actor connection
+// with defined status
+func (s *Socket) CloseMandatoryExt(a *Actor, message string) (err error) {
+	s.actors.Delete(a.ID())
+	reason := ws.NewCloseFrameBody(ws.StatusMandatoryExt, message)
+	frame := ws.NewCloseFrame(reason)
+	err = ws.WriteFrame((*a.conn), frame)
+
+	if err == nil {
+		err = (*a.conn).Close()
+	}
+	return
+}
+
+// CloseInternalServerError is used to close actor connection
+// with defined status
+func (s *Socket) CloseInternalServerError(a *Actor, message string) (err error) {
+	s.actors.Delete(a.ID())
+	reason := ws.NewCloseFrameBody(ws.StatusInternalServerError, message)
+	frame := ws.NewCloseFrame(reason)
+	err = ws.WriteFrame((*a.conn), frame)
+
+	if err == nil {
+		err = (*a.conn).Close()
+	}
+	return
+}
+
+// CloseTLSHandshake is used to close actor connection
+// with defined status
+func (s *Socket) CloseTLSHandshake(a *Actor, message string) (err error) {
+	s.actors.Delete(a.ID())
+	reason := ws.NewCloseFrameBody(ws.StatusTLSHandshake, message)
+	frame := ws.NewCloseFrame(reason)
+	err = ws.WriteFrame((*a.conn), frame)
+
+	if err == nil {
+		err = (*a.conn).Close()
+	}
+	return
 }
 
 // Callback used to set handler of incoming message
 func (s *Socket) Callback(cb func(c *Context) error) {
 	s.cb = func(c *Context) error {
-		defer func() {
-			if *c.event.code == TypeDisconnected {
-				s.CloseByIDWithMessage(*c.sender.id, ws.StatusNoMeaningYet, "")
-			}
-		}()
 		return cb(c)
 	}
 }
