@@ -11,7 +11,7 @@ This project not done yet, and we still working to improving this. If you have a
 - [ ] Data encrypt
 - [ ] Data response information (Ack, etc)
 - [ ] Send with worker pool (Async)
-- [ ] Non-blocking IO
+- [ ] Non-blocking IO (Adapter for various TCP Framework)
 - [ ] Rate limiting
 - [ ] Container instant WebSocket
 - [ ] Resource pooling
