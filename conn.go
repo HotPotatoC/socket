@@ -125,6 +125,17 @@ func (s *Socket) Callback(cb func(c *Context) error) {
 	}
 }
 
+// SendTextTo function that can enable to send message
+// to other connected client
+func (s *Socket) SendTextTo(id, message string) error {
+	var actor *Actor
+	var found bool
+	if actor, found = s.actors[id]; !found {
+		return errors.New("ID Not found")
+	}
+	return actor.SendText(message)
+}
+
 func createUpgrader(config *Config) *ws.Upgrader {
 	return &ws.Upgrader{}
 }
