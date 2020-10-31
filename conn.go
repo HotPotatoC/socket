@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net"
+	"sync"
 
 	"github.com/gobwas/ws"
 )
@@ -15,6 +16,35 @@ var (
 	errIDNotFound       = errors.New("ID Not found")
 	errTypeNotSupported = errors.New("Type not supported")
 )
+
+// ActorMap this map only storing actor and actor id
+// but with more safety
+type ActorMap struct {
+	sync.RWMutex
+	maps map[string]*Actor
+}
+
+// Insert actor to map
+func (m *ActorMap) Insert(id string, a *Actor) {
+	m.Lock()
+	m.maps[id] = a
+	m.Unlock()
+}
+
+// Delete actor from map
+func (m *ActorMap) Delete(id string) {
+	m.Lock()
+	delete(m.maps, id)
+	m.Unlock()
+}
+
+// Read function that read actor from map
+func (m *ActorMap) Read(id string) (*Actor, bool) {
+	m.Lock()
+	actor, found := m.maps[id]
+	m.Unlock()
+	return actor, found
+}
 
 // Socket struct for storing connection information
 type Socket struct {
