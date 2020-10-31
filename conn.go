@@ -109,7 +109,8 @@ func handleWhitelistHost(config *Config, host []byte) error {
 // to close connection with status code and message
 func (s *Socket) CloseByActorWithMessage(a *Actor, code ws.StatusCode, message string) (err error) {
 	delete(s.actors, a.ID())
-	err = frameBuilderAndSender(a, TypeDisconnected, []byte(message), code)
+	messageByte := append([]byte{}, message...)
+	err = frameBuilderAndSender(a, TypeDisconnected, messageByte, code)
 	if err == nil {
 		err = (*a.conn).Close()
 	}
