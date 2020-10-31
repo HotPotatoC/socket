@@ -212,3 +212,12 @@ func (s *Socket) SendByteTo(id string, data []byte) error {
 	}
 	return actor.SendBytes(data)
 }
+
+// IterateEachActor this function enable you to send
+// text to every client but by criteria, return true if then this client
+// will receive the message
+func (s *Socket) IterateEachActor(cb func(*Actor)){
+	for _, a := range s.actors.maps {
+		go cb(a)
+	}
+}
