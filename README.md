@@ -9,8 +9,9 @@ This project not done yet, and we still working to improving this. If you have a
 - [X] Send message to other client (Sync)
 - [X] Close connection
 - [ ] Data encrypt
-- [ ] Send with worker pool (Async)
 - [ ] Data response information (Ack, etc)
+- [ ] Send with worker pool (Async)
+- [ ] Non-blocking IO
 - [ ] Rate limiting
 - [ ] Container instant WebSocket
 - [ ] Resource pooling
