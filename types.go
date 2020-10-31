@@ -1,8 +1,6 @@
 package socket
 
 import (
-	"errors"
-
 	"github.com/gobwas/ws"
 )
 
@@ -23,8 +21,6 @@ const (
 	TypeBinary TypeCode = 0x2
 )
 
-var typeNotSupported = errors.New("Type not supported")
-
 // Eq supposed to compare code from this pkg
 // to ws.OpCode
 func (t *TypeCode) Eq(code interface{}) (bool, error) {
@@ -32,7 +28,7 @@ func (t *TypeCode) Eq(code interface{}) (bool, error) {
 		x := val ^ *t
 		return x == 0, nil
 	}
-	return false, typeNotSupported
+	return false, errTypeNotSupported
 }
 
 func parseTypeCode(code interface{}) (TypeCode, bool) {

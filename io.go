@@ -52,7 +52,7 @@ func frameBuilderAndSender(a *Actor, code interface{}, data []byte, status ...ws
 		}
 		err = ws.WriteFrame(*a.conn, frame)
 	} else {
-		err = typeNotSupported
+		err = errTypeNotSupported
 	}
 	return
 }

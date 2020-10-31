@@ -8,6 +8,14 @@ import (
 	"github.com/gobwas/ws"
 )
 
+var (
+	errCbNill           = errors.New("Callback should not be nill")
+	errPortNotValid     = errors.New("Port number should be larger than 1024 and not being used")
+	errNotAllowed       = errors.New("Host not allowed")
+	errIDNotFound       = errors.New("ID Not found")
+	errTypeNotSupported = errors.New("Type not supported")
+)
+
 // Socket struct for storing connection information
 type Socket struct {
 	port int
@@ -32,10 +40,10 @@ func CreateWebSocket() *Socket {
 // Listen function that loop every time to catch new connection
 func (s *Socket) Listen(port int) error {
 	if s.cb == nil {
-		return errors.New("Callback should not be nill")
+		return errCbNill
 	}
 	if port <= 1024 {
-		return errors.New("Port number should be larger than 1024 and not being used")
+		return errPortNotValid
 	}
 
 	ln, err := net.Listen("tcp", fmt.Sprintf(":%v", port))
@@ -102,7 +110,7 @@ func handleWhitelistHost(config *Config, host []byte) error {
 			return nil
 		}
 	}
-	return errors.New("Host not allowed")
+	return errNotAllowed
 }
 
 // CloseByActorWithMessage this function supposed
@@ -119,13 +127,11 @@ func (s *Socket) CloseByActorWithMessage(a *Actor, code ws.StatusCode, message s
 
 // CloseByIDWithMessage this function supposed
 // to close connection with status code and message
-func (s *Socket) CloseByIDWithMessage(id string, code ws.StatusCode, message string) (err error) {
+func (s *Socket) CloseByIDWithMessage(id string, code ws.StatusCode, message string) error {
 	if a, found := s.actors[id]; found {
-		err = s.CloseByActorWithMessage(a, code, message)
-	} else {
-		err = errors.New("ID Not found")
+		return s.CloseByActorWithMessage(a, code, message)
 	}
-	return
+	return errIDNotFound
 }
 
 // Callback used to set handler of incoming message
@@ -146,7 +152,7 @@ func (s *Socket) SendTextTo(id, message string) error {
 	var actor *Actor
 	var found bool
 	if actor, found = s.actors[id]; !found {
-		return errors.New("ID Not found")
+		return errIDNotFound
 	}
 	return actor.SendText(message)
 }
