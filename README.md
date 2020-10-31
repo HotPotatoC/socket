@@ -8,7 +8,7 @@ This project not done yet, and we still working to improving this. If you have a
 - [X] Simple API (but still low level)
 - [X] Send message to other client (Sync)
 - [X] Close connection
-- [X] Data encrypt
+- [ ] Data encrypt
 - [ ] Send with worker pool (Async)
 - [ ] Data response information (Ack, etc)
 - [ ] Rate limiting
@@ -50,7 +50,8 @@ func main() {
 
 		if ok, _ := eType.Eq(socket.TypeDisconnected); c.Message().String() == "exit" || ok {
 
-			// Close function should be called, it will handle delete session in internal server
+			// If close function not called when some client is disconnected
+			// Server will automatically close and delete client connection
 			err = server.CloseByActorWithMessage(c.Sender(), ws.StatusNormalClosure, "Byee Human")
 			return err
 		}
