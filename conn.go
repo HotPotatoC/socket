@@ -24,6 +24,13 @@ type ActorMap struct {
 	maps map[string]*Actor
 }
 
+// CreateActorMap ActorMap Constructor
+func CreateActorMap() *ActorMap {
+	return &ActorMap{
+		maps: map[string]*Actor{},
+	}
+}
+
 // Insert actor to map
 func (m *ActorMap) Insert(id string, a *Actor) {
 	m.Lock()
@@ -51,7 +58,7 @@ type Socket struct {
 	port int
 
 	// list of connected client
-	actors map[string]*Actor
+	actors *ActorMap
 
 	config *Config
 
@@ -62,7 +69,7 @@ type Socket struct {
 func CreateWebSocket() *Socket {
 	return &Socket{
 		port:   8000,
-		actors: make(map[string]*Actor),
+		actors: CreateActorMap(),
 		config: &DefaultConfig,
 	}
 }
@@ -102,18 +109,19 @@ func (s *Socket) Listen(port int) error {
 	}
 }
 
-func (s *Socket) registerActor(conn net.Conn) *Actor {
+func (s *Socket) registerActor(conn net.Conn) (actor *Actor) {
 	id := generateKey(s.config.UIDLength)
-	_, found := s.actors[id]
+	_, found := s.actors.Read(id)
 	for found {
 		id = generateKey(s.config.UIDLength)
-		_, found = s.actors[id]
+		_, found = s.actors.Read(id)
 	}
-	s.actors[id] = &Actor{
+	actor = &Actor{
 		id:   &id,
 		conn: &conn,
 	}
-	return s.actors[id]
+	s.actors.Insert(id, actor)
+	return
 }
 
 // serveActorMessage function that listen incoming message
@@ -146,7 +154,7 @@ func handleWhitelistHost(config *Config, host []byte) error {
 // CloseByActorWithMessage this function supposed
 // to close connection with status code and message
 func (s *Socket) CloseByActorWithMessage(a *Actor, code ws.StatusCode, message string) (err error) {
-	delete(s.actors, a.ID())
+	s.actors.Delete(a.ID())
 	messageByte := append([]byte{}, message...)
 	err = frameBuilderAndSender(a, TypeDisconnected, messageByte, code)
 	if err == nil {
@@ -158,7 +166,7 @@ func (s *Socket) CloseByActorWithMessage(a *Actor, code ws.StatusCode, message s
 // CloseByIDWithMessage this function supposed
 // to close connection with status code and message
 func (s *Socket) CloseByIDWithMessage(id string, code ws.StatusCode, message string) error {
-	if a, found := s.actors[id]; found {
+	if a, found := s.actors.Read(id); found {
 		return s.CloseByActorWithMessage(a, code, message)
 	}
 	return errIDNotFound
@@ -181,7 +189,7 @@ func (s *Socket) Callback(cb func(c *Context) error) {
 func (s *Socket) SendTextTo(id, message string) error {
 	var actor *Actor
 	var found bool
-	if actor, found = s.actors[id]; !found {
+	if actor, found = s.actors.Read(id); !found {
 		return errIDNotFound
 	}
 	return actor.SendText(message)
