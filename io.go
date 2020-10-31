@@ -37,22 +37,6 @@ func (s *Socket) contextBuilder(a *Actor) (*Context, error) {
 	return ctx, nil
 }
 
-func frameBuilderAndSender(a *Actor, code interface{}, data []byte, status ...ws.StatusCode) (err error) {
-	var ok bool
-	var val TypeCode
-	var frame ws.Frame
-
-	if val, ok = parseTypeCode(code); ok {
-		if ok, err = val.Eq(TypeDisconnected); ok {
-			if len(status) == 1 {
-				frame = ws.NewCloseFrame(ws.NewCloseFrameBody(status[0], string(data)))
-			}
-		} else {
-			frame = ws.NewFrame(ws.OpCode(val), true, data)
-		}
-		err = ws.WriteFrame(*a.conn, frame)
-	} else {
-		err = errTypeNotSupported
-	}
-	return
+func frameCompiler(a *Actor, code TypeCode, data []byte) error {
+	return ws.WriteFrame(*a.conn, ws.NewFrame(ws.OpCode(code), true, data))
 }

@@ -19,10 +19,10 @@ func (actor *Actor) ID() string {
 // SendText write message to this actor
 func (actor *Actor) SendText(message string) error {
 	messageByte := append([]byte{}, message...)
-	return frameBuilderAndSender(actor, TypeText, messageByte)
+	return frameCompiler(actor, TypeText, messageByte)
 }
 
 // SendBytes write byte of data to this actor
 func (actor *Actor) SendBytes(data []byte) error {
-	return frameBuilderAndSender(actor, TypeBinary, data)
+	return frameCompiler(actor, TypeBinary, data)
 }
