@@ -26,11 +26,11 @@ func (msg *Message) String() string {
 
 // Event describe of incoming event type
 type Event struct {
-	code *TypeCode
+	code TypeCode
 }
 
 // Type return event type
-func (e *Event) Type() *TypeCode {
+func (e *Event) Type() TypeCode {
 	return e.code
 }
 
@@ -78,16 +78,14 @@ func (c *Context) Ctx() context.Context {
 
 var connectedContext = func(a *Actor) *Context {
 	c := createContext(&DefaultConfig)
-	connected := TypeConnected
-	c.event.code = &connected
+	c.event.code = TypeConnected
 	c.sender = a
 	return c
 }
 
 var closedContext = func(a *Actor) *Context {
 	c := createContext(&DefaultConfig)
-	disconnected := TypeDisconnected
-	c.event.code = &disconnected
+	c.event.code = TypeDisconnected
 	c.sender = a
 	return c
 }

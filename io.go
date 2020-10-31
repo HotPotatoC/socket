@@ -32,7 +32,7 @@ func (s *Socket) contextBuilder(a *Actor) (*Context, error) {
 
 	ctx := createContext(s.config)
 	ctx.message.data = payload
-	ctx.event.code = &code
+	ctx.event.code = code
 	ctx.sender = a
 	return ctx, nil
 }
