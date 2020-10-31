@@ -102,7 +102,9 @@ func (s *Socket) Listen(port int) error {
 			}
 		}
 		if err != nil {
-			conn.Close()
+			if conn != nil {
+				conn.Close()
+			}
 			continue
 		}
 		s.serveActorMessage(currentActor)
