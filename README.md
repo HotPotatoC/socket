@@ -52,8 +52,7 @@ func main() {
 
 		if ok, _ := eType.Eq(socket.TypeDisconnected); c.Message().String() == "exit" || ok {
 
-			// If close function not called when some client is disconnected
-			// Server will automatically close and delete client connection
+			// this function should be called in disconnected event, to delete actor session in server
 			err = server.CloseByActorWithMessage(c.Sender(), ws.StatusNormalClosure, "Byee Human")
 			return err
 		}
