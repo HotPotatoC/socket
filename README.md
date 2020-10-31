@@ -55,7 +55,10 @@ func main() {
 			err = server.CloseByActorWithMessage(c.Sender(), ws.StatusNormalClosure, "Byee Human")
 			return err
 		}
-		return c.Sender().SendText(c.Message().String())
+
+		// SendTextTo client can send message each other through this function
+		// but before you use it, you must store the specified client id
+		return server.SendTextTo(c.Sender().ID(), "Hello from server")
 	})
 
 	fmt.Println(server.Listen(8000))

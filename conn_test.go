@@ -21,7 +21,6 @@ func TestSocket_Listen(t *testing.T) {
 		}
 		if ok, _ := c.Event().Type().Eq(socket.TypeDisconnected); c.Message().String() == "exit" || ok {
 
-			// Close function should be called, it will handle delete session in internal server
 			err = server.CloseByActorWithMessage(c.Sender(), ws.StatusNormalClosure, "Byee Human")
 			return nil
 		}
