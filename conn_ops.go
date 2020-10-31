@@ -2,6 +2,16 @@ package socket
 
 import "github.com/gobwas/ws"
 
+// Close no meaning close function
+func (s *Socket) Close(a *Actor) (err error) {
+	s.actors.Delete(a.ID())
+	err = s.CloseNoMeaningYet(a, "")
+	if err == nil {
+		err = (*a.conn).Close()
+	}
+	return
+}
+
 // CloseNormalClosure is used to close actor connection
 // with defined status
 func (s *Socket) CloseNormalClosure(a *Actor, message string) (err error) {
