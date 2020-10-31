@@ -115,7 +115,14 @@ func (s *Socket) CloseByIDWithMessage(id string, code ws.StatusCode, message str
 
 // Callback used to set handler of incoming message
 func (s *Socket) Callback(cb func(c *Context) error) {
-	s.cb = cb
+	s.cb = func(c *Context) error {
+		defer func() {
+			if *c.event.code == TypeDisconnected {
+				s.CloseByIDWithMessage(*c.sender.id, ws.StatusNoMeaningYet, "")
+			}
+		}()
+		return cb(c)
+	}
 }
 
 func createUpgrader(config *Config) *ws.Upgrader {
