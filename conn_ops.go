@@ -173,3 +173,14 @@ func (s *Socket) SendTextTo(id, message string) error {
 	}
 	return actor.SendText(message)
 }
+
+// SendByteTo function that can enable to send message
+// to other connected client
+func (s *Socket) SendByteTo(id string, data []byte) error {
+	var actor *Actor
+	var found bool
+	if actor, found = s.actors.Read(id); !found {
+		return errIDNotFound
+	}
+	return actor.SendBytes(data)
+}
