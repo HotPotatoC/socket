@@ -8,6 +8,7 @@ This project not done yet, and we still working to improving this. If you have a
 - [X] Simple API (but still low level)
 - [X] Send message to other client (Sync)
 - [X] Close connection
+- [ ] Graceful shutdown
 - [ ] Data encrypt
 - [ ] Data response information (Ack, etc)
 - [ ] Send with worker pool (Async)
