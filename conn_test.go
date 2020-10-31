@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/Stalync/socket"
-	"github.com/gobwas/ws"
 )
 
 func TestSocket_Listen(t *testing.T) {
@@ -13,16 +12,8 @@ func TestSocket_Listen(t *testing.T) {
 
 	server.Callback(func(c *socket.Context) (err error) {
 
-		if ok, _ := c.Event().Type().Eq(socket.TypeConnected); ok {
-
-			fmt.Println("Someone connected with id: " + c.Sender().ID())
-			return c.Sender().SendText("Welcome user")
-
-		}
-		if ok, _ := c.Event().Type().Eq(socket.TypeDisconnected); c.Message().String() == "exit" || ok {
-
-			err = server.CloseByActorWithMessage(c.Sender(), ws.StatusNormalClosure, "Byee Human")
-			return nil
+		if ok, _ := c.Event().Type().Eq(socket.TypeText); ok {
+			return c.Sender().SendText(c.Message().String())
 		}
 
 		return nil
