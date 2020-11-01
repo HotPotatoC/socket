@@ -38,3 +38,8 @@ func (actor *Actor) SendBytes(data []byte) error {
 func (actor *Actor) PING() error {
 	return frameCompiler(actor, TypePing, PING)
 }
+
+// PONG function to send Ping message
+func (actor *Actor) PONG() error {
+	return frameCompiler(actor, TypePong, PONG)
+}
