@@ -1,6 +1,8 @@
 package wpond
 
-import "github.com/alitto/pond"
+import (
+	"github.com/alitto/pond"
+)
 
 // WorkerPond Worker wrapper for Pond API
 type WorkerPond struct {
@@ -30,12 +32,14 @@ func (w *WorkerPond) Submit(params ...interface{}) {
 		for _, y := range params {
 			func(param interface{}) {
 				submited := w.pool.TrySubmit(func() {
-					w.cb(y)
+					w.cb(param)
 				})
 				if !submited {
-					w.cbOnError(y)
+					w.cbOnError(param)
 				}
 			}(y)
 		}
+	} else {
+		panic("Callback and CallbackOnError should not be nil")
 	}
 }
