@@ -7,6 +7,8 @@ type Config struct {
 	Timeout       time.Duration
 	hostWhitelist []string
 	UIDLength     int
+	WorkerPool    int
+	BufferedTask  int
 }
 
 func (c *Config) pushHostWhitelist(h string) {
@@ -18,4 +20,6 @@ var DefaultConfig = Config{
 	Timeout:       time.Second * 4,
 	hostWhitelist: make([]string, 0),
 	UIDLength:     16,
+	WorkerPool:    100,
+	BufferedTask:  1024,
 }

@@ -1,3 +1,5 @@
+github.com/alitto/pond v1.4.0 h1:tTkN+6edFsWXIxIwpUj5ouSQgj5BPhN6K61+UTlFocU=
+github.com/alitto/pond v1.4.0/go.mod h1:VkhnWZhFBtkzZgpjXEyQ4Skyf8nfcGXsZ7PTklN29a4=
 github.com/gobwas/httphead v0.0.0-20200921212729-da3d93bc3c58 h1:YyrUZvJaU8Q0QsoVo+xLFBgWDTam29PKea6GYmwvSiQ=
 github.com/gobwas/httphead v0.0.0-20200921212729-da3d93bc3c58/go.mod h1:L0fX3K22YWvt/FAX9NnzrNzcI4wNYi9Yku4O0LKYflo=
 github.com/gobwas/pool v0.2.1 h1:xfeeEhW7pwmX8nuLVlqbzVc7udMDrwetjEv+TZIz1og=
