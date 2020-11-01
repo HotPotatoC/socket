@@ -35,11 +35,13 @@ func (actor *Actor) SendBytes(data []byte) error {
 }
 
 // PING function to send Ping message
-func (actor *Actor) PING() error {
+func (actor *Actor) PING(message []byte) error {
+	if len(message) == 0 {
+		message = PING
+	}
 	return frameCompiler(actor, TypePing, PING)
 }
 
-// PONG function to send Ping message
-func (actor *Actor) PONG() error {
+func (actor *Actor) pong() error {
 	return frameCompiler(actor, TypePong, PONG)
 }
