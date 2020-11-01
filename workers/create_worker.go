@@ -25,6 +25,7 @@ type Worker interface {
 	Submit(...interface{})
 }
 
+// CreateWorkerPond constructor with default config pond worker pool
 func CreateWorkerPond(c *socket.Config) Worker {
 	worker := wpond.WorkerPond{}
 	worker.Init(c.WorkerPool, c.BufferedTask)
