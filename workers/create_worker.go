@@ -1,5 +1,10 @@
 package workers
 
+import (
+	"github.com/Stalync/socket"
+	"github.com/Stalync/socket/workers/wpond"
+)
+
 // Worker this interface defined Worker behaviour
 // so, we can use many backend workers API
 type Worker interface {
@@ -18,4 +23,10 @@ type Worker interface {
 	// Submit this function supposed to handle submit data
 	// parameter can be list
 	Submit(...interface{})
+}
+
+func CreateWorkerPond(c *socket.Config) Worker {
+	worker := wpond.WorkerPond{}
+	worker.Init(c.WorkerPool, c.BufferedTask)
+	return &worker
 }
